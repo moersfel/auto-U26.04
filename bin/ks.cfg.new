@@ -1,0 +1,24 @@
+# Kickstart file
+
+install
+url --url http://192.168.5.5/fc/4/update-iso/original-release
+lang en_US.UTF-8
+langsupport --default=en_US.UTF-8 en_US.UTF-8 en_US en en_US.UTF-8 en_US en
+keyboard us
+network --device eth0 --bootproto dhcp
+rootpw --iscrypted $1$JJr9Oivb$yVY//2IxvmcNm3vGFpJ4Q/
+firewall --enabled --port=22:tcp
+selinux --enforcing
+authconfig --enableshadow --enablemd5
+timezone --utc America/Los_Angeles
+
+%packages
+@ office
+@ editors
+@ gnome-desktop
+@ dialup
+@ java
+@ base-x
+@ graphical-internet
+
+%post

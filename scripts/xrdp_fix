@@ -1,0 +1,2 @@
+mkdir /etc/systemd/system/xrdp.service.d
+cp -f override.conf /etc/systemd/system/xrdp.service.d

@@ -1,0 +1,22 @@
+###############################################################################
+# Script that configures system and installs packages
+###############################################################################
+
+mkdir -p $KICKSTART_MNT
+mount -t nfs $KICKSTART_SERVER:$KICKSTART_PATH $KICKSTART_MNT
+
+mkdir -p $LOG_DIR
+
+cd $KICKSTART_MNT/$SCRIPTS_PATH
+for f in `ls`; do
+	# Execute script and store the log
+	$KICKSTART_MNT/bin/Run_Script $f >> $LOG_DIR/$f 2>&1
+done
+
+/tmp/NVIDIA-Linux-x86-1.0-4496-pkg2.run -s
+cd /
+reboot     
+umount $KICKSTART_MNT
+rmdir $KICKSTART_MNT
+
+# install graphics card driver and reboot

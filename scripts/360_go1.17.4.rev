@@ -1,0 +1,40 @@
+#!/bin/bash
+#################################################
+#  Script name: 360_go1.17.4.rev
+#  Created on:    
+#  Author:      
+#  Purpose:     Installs go programing language
+#  Synopsis:    
+#  Notes:        
+#  History:     20220919 — Script Tested for Ubuntu 22.04
+#################################################
+printf "Starting\n"
+cd /tmp
+
+# Get go
+wget https://go.dev/dl/go1.17.4.linux-amd64.tar.gz
+
+# Remove old go directory if it exists
+if test -d "/usr/local/go"; then
+  rm -rf /usr/local/go
+fi
+
+# Remove old go executable if it exists
+if test -f "/usr/bin/go"; then
+  rm /usr/bin/go
+fi
+
+# Install new go
+tar -C /usr/local -xzf go1.17.4.linux-amd64.tar.gz
+
+# Link go to normal path
+ln -s /usr/local/go/bin/go /usr/bin/go
+
+# install go tools
+export GOPATH=/usr/local/go
+/usr/bin/go install golang.org/x/tools/gopls@latest
+
+# Show go version
+echo "go version is:"
+/usr/bin/go version
+

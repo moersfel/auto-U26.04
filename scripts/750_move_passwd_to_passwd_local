@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 750_move_passwd_to_passwd_local 
+#  Created on: 2013  
+#  Author: Jim Moersfelder      
+#  Purpose: Move passwd to passwd.local      
+#  Synopsis:     
+#  Notes:        
+#  History: 08/07/15 - Jarred Stein - Tested for F22     
+#	6/29/17 - Hugo Huang - Tested for U16
+#######################################
+
+#move and change it so users can't use it
+echo "Renaming passwd to passwd.local"
+mv /usr/bin/passwd /usr/bin/passwd.local
+chmod 700 /usr/bin/passwd.local #only allow root permissions
+
+#Replace it with an informational message
+echo "#!/bin/bash" > /usr/bin/passwd
+echo 'echo "Please change your password through the campus website at http://accounts.ucdavis.edu."' >> /usr/bin/passwd
+chmod 755 /usr/bin/passwd
+
+printf "Done!\n"

@@ -1,0 +1,2 @@
+cp 50-cloud-init.conf /etc/ssh/sshd_config.d/
+chmod 600 /etc/ssh/sshd_config.d/50-cloud-init.conf

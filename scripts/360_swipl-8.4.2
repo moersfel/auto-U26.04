@@ -1,0 +1,28 @@
+#!/bin/bash
+#################################################
+#  Script name: 360_swi-prolog8.4.2
+#  Created on:    
+#  Author:      
+#  Purpose:     Installs SWI Prolog compiler and development environment
+#  Synopsis:    
+#  Notes:        From TASK0081807 - https://docs.google.com/document/d/1ekDg1Thu3Nxm0M-655S3Rd3HULDlrcIxz0L-ndYirR0/edit?tab=t.0
+#  History:     
+#################################################
+printf "Starting\n"
+
+# Pre-req
+apt-get install -y build-essential cmake libgmp-dev libssl-dev zlib1g-dev libreadline-dev libncurses-dev libffi-dev libarchive-dev
+
+# install 
+
+cd /tmp
+wget https://www.swi-prolog.org/download/stable/src/swipl-8.4.2.tar.gz
+tar -xvf swipl-8.4.2.tar.gz
+cd swipl-8.4.2
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local ..
+make
+make install
+
+printf "Done!\n"

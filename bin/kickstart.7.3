@@ -1,0 +1,66 @@
+# Mouse and video information get overwritten by kickstart
+text
+lang en_US
+langsupport --default en_US en_US 
+keyboard us
+mouse logimman+ps/2
+timezone --utc America/Los_Angeles
+rootpw --iscrypted $1$xgapacLS$fxhp4aSNOmpJ1zLvvQssm1 
+bootloader --useLilo --linear --location=mbr 
+install
+nfs --server <ISO_SERVER> --dir <ISO_PATH>
+zerombr yes
+clearpart --all --initlabel 
+part /boot --fstype ext3 --size 50 
+part  swap --size 512 
+part / --fstype ext3 --size 3000 --grow 
+network --bootproto static  --ip <IP_ADDRESS>  --netmask <SUBNET_MASK> --gateway <GATEWAY>  --nameserver <NAME_SERVER> 
+auth  --enablemd5  --enablenis --nisdomain <NIS_DOMAIN>  --nisserver <NIS_SERVER>
+firewall --disabled
+#xconfig  --depth 32 --resolution 1024x768 --defaultdesktop=KDE --startxonboot --hsync 30-70 --vsync 50-150
+xconfig  --defaultdesktop=KDE --startxonboot
+
+%packages
+@Printing Support
+@Classic X Window System
+@X Window System
+@GNOME
+@KDE
+@Network Support
+@Graphics and Image Manipulation
+@Router / Firewall
+@Network Managed Workstation
+@Authoring and Publishing
+@Emacs
+@Utilities
+@Software Development
+mtools
+enscript
+wu-ftpd
+pine
+rwho
+netscape-navigator
+netscape-communicator
+netscape-common
+WindowMaker
+WindowMaker-libs
+postgresql-libs
+postgresql-devel
+vim-X11
+xlockmore
+gv
+lynx
+elinks
+mutt
+sharutils
+metamail
+elm
+joe
+
+%pre
+
+%post
+###############################################################################
+# Custom kickstart gets appended here
+###############################################################################
+

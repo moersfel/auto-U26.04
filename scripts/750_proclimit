@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 750_proclimit       
+#  Created on:  Jan. 31, 2022
+#  Author:      Jim Moersfelder
+#  Purpose:     Set a processor limit in the CSIF to avoid fork bombs killing
+#               The computers. 
+#  Synopsis:
+#  History:                                
+#######################################
+
+# This sets a 2000 Processor limit on the computers for each user.
+echo "Adding content to /etc/security/limits.conf"
+echo "*               hard    nproc           2000" >> /etc/security/limits.conf

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+###############################################################################
+#  Purpose: This script will change into the support directory for the 
+#           script and execute the given script.
+###############################################################################
+
+
+###############################################################################
+# Setup
+# Determines if a support directory for the script exists
+###############################################################################
+
+script_base=`basename $1`
+script_name=`echo $script_base | sed 's/^[0-9]\+_\(.\+\)$/\1/'`	# strip ???_
+
+# USE -L FLAG TO CHECK FOR LINKED DIRECTORIES
+if [ -d $KICKSTART_MNT$SCRIPTS_SUPPORT_PATH/$script_name -o -L $KICKSTART_MNT$SCRIPTS_SUPPORT_PATH/$script_name ]; then
+	cd "$KICKSTART_MNT$SCRIPTS_SUPPORT_PATH/$script_name"
+fi
+
+###############################################################################
+# Execute the given script
+###############################################################################
+$KICKSTART_MNT$SCRIPTS_PATH/$1

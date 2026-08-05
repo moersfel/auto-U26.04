@@ -1,0 +1,49 @@
+#!/bin/bash
+
+#######################################
+#  Script name:  
+#  Created on:   
+#  Author:       
+#  Purpose: Sets up the shell configuration on the lab machines.     
+#  Synopsis:     
+#  Notes: These files don't come standard with Fedora as of Core 5        
+#  History:      
+#	6/28/17 - Hugo Huang - Tested for U16
+#   9/16/2022 — Ken Gribble — Porting for Ubuntu 22.04
+#############################################
+
+echo "Setting up default shell environment..."
+
+# copies files in support_files/shells to /etc/profile.d
+cp *.sh /etc/profile.d
+cp *.csh /etc/profile.d
+chmod 755 /etc/profile.d/*.csh
+chmod 755 /etc/profile.d/*.sh
+
+echo -e "alias rm 'rm -i'\n\
+alias ll 'ls -l --color=auto'\n\
+alias ls 'ls --color=auto'\n\
+alias tin 'tin -r'\n\
+alias cp 'cp -i'\n" >> /etc/csh.cshrc	
+
+echo -e "alias rm='rm -i'\n\
+alias ll='ls -l --color=auto'\n\
+alias ls='ls --color=auto'\n\
+alias tin='tin -r'\n\
+alias cp='cp -i'\n" >> /etc/bash.bashrc
+
+# 
+sed -i 's/set prompt/#set prompt/' /etc/csh.cshrc
+
+echo "if (\$?prompt) then" >> /etc/csh.cshrc
+echo "  if (\$?tcsh) then" >> /etc/csh.cshrc
+echo "    set promptchars='\$#'" >> /etc/csh.cshrc
+echo "    set prompt='[%n@%m %c]%# '" >> /etc/csh.cshrc
+echo "    # make completion work better by default" >> /etc/csh.cshrc
+echo "    set autolist" >> /etc/csh.cshrc
+echo "  else" >> /etc/csh.cshrc
+echo "    set prompt=\\[\$user@\`hostname -s\`\\]\\\$" >> /etc/csh.cshrc
+echo "  endif" >> /etc/csh.cshrc
+echo "endif" >> /etc/csh.cshrc
+
+printf "Done!\n"

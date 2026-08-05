@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 370_gpucounter
+#  Created on: September 30, 2022
+#  Author: Jim Moersfelder
+#  Purpose: To give rights to the gpu counter to all users
+#  Synopsis:
+#  Notes:  John Owens needed for his class
+#         Here is the page I followed:
+#          https://developer.nvidia.com/nvidia-development-tools-solutions-err_nvgpuctrperm-permission-issue-performance-counters#LinuxDesktopPlatforms
+
+#######################################
+
+echo "Doing graphics..."
+
+if [ ! "`/usr/bin/lspci | /bin/grep NVIDIA`" ]; then
+  echo "No NVIDIA cards found. Exiting without install."
+  exit
+fi
+echo "options nvidia \"NVreg_RestrictProfilingToAdminUsers=0\"" > /etc/modprobe.d/gpucounter.conf
+update-initramfs -u

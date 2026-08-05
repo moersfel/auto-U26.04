@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 371_firefox
+#  Created on: 10 Oct 2020
+#  Author: Jim Moersfelder
+#  Purpose: To install a non-snap verion os firefox
+#  Synopsis:
+#  Notes: 
+#  History: 
+#######################################
+
+echo "Installing firefox repo\n"
+add-apt-repository ppa:mozillateam/ppa
+
+echo "Make non-snap repo the priority\n"
+echo 'Package: *
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 1001
+
+Package: firefox
+Pin: version 1:1snap*
+Pin-Priority: -1
+' | sudo tee /etc/apt/preferences.d/mozilla-firefox
+
+
+
+
+echo "Remove snap firefox\n"
+snap remove firefox
+
+echo "Install firefox\n"
+apt install firefox
+
+echo "Make sure unattended upgrades doesn't install the snap firefox\n"
+echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+
+echo "\n Done\n"

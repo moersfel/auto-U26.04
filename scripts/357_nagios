@@ -1,0 +1,71 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 357_nagios  
+#  Created on: 10/28/13  
+#  Author:  Jim Moersfelder     
+#  Purpose: Install and configure Nagios NRPE     
+#  Synopsis: Installs nagios plugins via dnf, modifies the config using nagios.pl, copies over  custom scripts from cable2, then enables and restarts the nrpe service    
+#  Notes:        
+#  History: 10-28-2013 - Unknown - F20 Script build
+#           6-26-2015 - Jarred Stein - Changed yum installs to dnf
+#           7-23-2015 - Bill Otwell - Verified and added header
+#           7-28-2015 - Bill Otwell - created nagios.pl to modify config instead of copying from cable
+#	    7-15-2019 - Samuel Tseng - Added user account changes to allow nagios to ssh into the machine
+#######################################
+
+echo -e "Begin Nagios tasks\n"
+
+# Installs Nagios related packages
+#echo -e "Installing Nagios related packages"
+#dnf install -y nrpe nagios-plugins-all
+
+echo -e "Installing Nagios NRPE Server"
+apt-get -y install nagios-nrpe-server
+
+# Creates backup of the config file
+echo -e "Backing up original config file"
+cp -n -p /etc/nagios/nrpe.cfg /etc/nagios/nrpe.cfg.org
+
+# Edits config file using perl
+echo -e "Modifying config file"
+#./nagios.pl
+#cp -f /tmp/nrpe.cfg /etc/nagios/nrpe.cfg
+cp -f nrpe.cfg /etc/nagios/nrpe.cfg
+
+#Edit config file for 32 vs 64
+#if [ $( uname -m ) == "x86_64" ]; then
+#j	sed -i 's>/lib/>/lib64/>g' /etc/nagios/nrpe.cfg
+#	PLUGINS=/usr/lib64/nagios/plugins
+#else
+#	PLUGINS=/usr/lib/nagios/plugins
+#fi
+
+# Copies over the custom scripts
+echo -e "Copying over custom scripts"
+for SCRIPT in ./scripts/*; do
+	cp -f -p $SCRIPT /usr/lib/nagios/plugins/
+done
+
+# change default shell for nagios from nologin to rbash
+sed -i 's/\/var\/lib\/nagios:\/usr\/sbin\/nologin/\/var\/lib\/nagios:\/bin\/rbash/g' /etc/passwd
+
+# upload nagios ssh key to authorized_keys
+mkdir -p /var/lib/nagios/.ssh
+cat nagios_to_floor.pub > /var/lib/nagios/.ssh/authorized_keys
+chmod 600 /var/lib/nagios/.ssh/authorized_keys
+chown -R nagios:nagios /var/lib/nagios/.ssh
+
+# Copy manual WoL script into /root/scripts
+mkdir /root/scripts
+cp wol /root/scripts
+
+# Enables NRPE to start automatically
+echo -e "Enabling NRPE via systemctl"
+systemctl enable nagios-nrpe-server.service
+
+# Restarts NRPE
+echo -e "Restarting NRPE via systemctl"
+systemctl restart nagios-nrpe-server.service
+
+echo -e "\nDone!"

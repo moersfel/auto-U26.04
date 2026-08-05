@@ -1,0 +1,15 @@
+#!/usr/bin/perl
+open (IN,"/lib/udev/rules.d/50-udev-default.rules");
+open (OUT,">/tmp/50-udev-default.rules");
+#This script works great to add something to the top of a file
+while (<IN>) {
+     if (/ KERNEL=="renderD\*", GROUP="render", MODE="0660"/) {
+          print OUT "SUBSYSTEM==\"drm\", KERNEL==\"renderD*\", GROUP=\"render\", MODE=\"0666\"\n";
+     } else {
+          print OUT "$_";
+     }
+}
+close (IN);
+close (OUT);
+
+system ("cp /tmp/50-udev-default.rules /lib/udev/rules.d/50-udev-default.rules");

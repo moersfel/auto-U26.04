@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 360_qtspim
+#  Created on: November 22, 2022
+#  Author: Jim Moersfelder
+#  Purpose: To install qt_spim
+#  Synopsis:
+#  Notes:  Matt Farrens wanted it. INC1524481
+#         Farrens suggested getting it from:
+#           https://sourceforge.net/projects/spimsimulator/files/ 
+#          I put qtspim_9.1.23_linux64.deb in support_files/qtspim
+#          From the above link
+#          
+#######################################
+
+echo "Doing qtspim..."
+
+dpkg --install qtspim_9.1.23_linux64.deb
+
+echo "DONE with qtspim..."

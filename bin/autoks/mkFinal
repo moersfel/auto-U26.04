@@ -1,0 +1,149 @@
+#! /bin/tcsh
+# Expects boot image name as first arg (image created by disk).
+# Also expects location of kickstart file as second arg, and
+# assumes the the driver image (drvnet.img) is in the current dir.
+
+unalias cp # no prompting
+
+if ($#argv != 2) then
+  echo "usage: mkFinal bootImgName ksfile"
+  exit 1
+endif
+
+# umount * # clear previous mountings 
+
+# script to decompress boot image and output its modules in directory.
+set bootImgName = $1
+set bootImgMount = "bootimg"
+set rdMount = "initrd"
+set regMods = "RDModules"  # directories with modules (*.o)
+
+# mount the boot image first
+mkdir $bootImgMount
+
+mount -o loop $bootImgName $bootImgMount
+# uncompress ramdisk image and mount it
+gzip -dc $bootImgMount/initrd.img > initrd.ext2
+mkdir $rdMount
+
+mount -o loop initrd.ext2 $rdMount
+# now get the modules, decompress them
+gzip -dc $rdMount/modules/modules.cgz > modules.cpio
+mkdir $regMods 
+cd $regMods
+cpio -idumv < ../modules.cpio 
+cd ..
+
+umount $bootImgMount
+umount $rdMount
+#######################################################
+
+# script to uncompress the modules in the cd image
+# Expects drvnet.img in same current directory
+# Produces the directory Modules as output
+
+set netMods = "Modules"
+set netDir = "drvnetImg"
+
+# first mount the drvnet.img file
+mkdir $netDir
+
+mount -o loop drvnet.img $netDir
+# next, uncompress modules.cgz
+gzip -dc $netDir/modules.cgz > modules.cpio
+# finally, decompress cpio to a modules directory
+mkdir $netMods
+cd $netMods
+cpio -idumv < ../modules.cpio 
+cd .. 
+
+umount $netDir
+
+#######################################################
+
+# script to merge supporting files together 
+
+set modulesDep = "modules.dep"
+set pcitable = "pcitable"
+set modsPrefix = "2.4.20-8BOOT"  # this will have to be changed per version
+# it is the directory of the modules 
+mount -o loop drvnet.img $netDir
+mount -o loop initrd.ext2 $rdMount
+
+set regDir = $rdMount/modules
+
+
+# merge files together, store in current directory
+cat $regDir/module-info $netDir/modinfo > module-info
+cat $regDir/$modulesDep $netDir/$modulesDep > $modulesDep
+cat $regDir/$pcitable $netDir/$pcitable > $pcitable
+
+# now make the modules directory and copy drivers from both images
+mkdir $modsPrefix
+
+# does not copy hidden files! Warning!
+cp -rf $netMods/$modsPrefix/* $regMods/$modsPrefix/* $modsPrefix
+# compress the modules back up
+find $modsPrefix | cpio -ov -H crc > modules.cpio
+gzip -n -9 modules.cpio        # produces modules.cgz
+mv modules.cpio.gz modules.cgz
+
+# don't need netDir any more (which was drvnet.img)
+umount $netDir
+umount $rdMount
+#########################################################
+
+# script to make a large initrd image and copy the pre-existing
+# smaller one to it, as well as the ks.cfg file.
+set bigrd = "big_initrd"
+set bigrdMount = "bigMount"
+
+mount -o loop initrd.ext2 $rdMount
+# make the image (ext2 filesystem)
+dd if=/dev/zero of=$bigrd bs=1024 count=2800
+/sbin/mke2fs -F $bigrd  
+
+# mount it on a dir
+mkdir $bigrdMount
+mount -t ext2 -o loop $bigrd $bigrdMount
+
+# copy old initrd
+cd $rdMount
+find . | cpio -dumpv ../$bigrdMount
+cd ..
+# cp -rf $rdMount/* $bigrdMount !doesn't copy hidden files!
+
+
+# make the bood device
+mknod $bigrdMount/dev/hda1 b 3 1
+
+# copy modules
+cp -f modules.cgz module-info $modulesDep $pcitable $bigrdMount/modules
+
+umount $rdMount # unmount initrd (original ramdisk)
+umount $bigrdMount  # done making ramdisk image
+# now compress it 
+gzip -c $bigrd > initrd.img
+
+##############################################################
+
+# creates an msdos file system image
+# set of files to copy to the image as the rest of args.
+set sectorSize = 512
+set nsectors = 11200
+set ksimg = "ksimage"
+set syslinuxCFG = "syslinux.cfg.template"
+/sbin/mkdosfs -C $ksimg -S $sectorSize $nsectors
+mkdir tempMount
+mount -o loop $ksimg tempMount
+mount -o loop $bootImgName $bootImgMount
+
+# copy boot floppy image to new bigger image
+cp -rf  $bootImgMount/* tempMount  # boot image contents
+cp -f initrd.img tempMount # don't forget ramdisk!
+cp -f $2 tempMount # the ks.cfg file!
+cp -f $syslinuxCFG tempMount/syslinux.cfg # and the sylinux config file!
+umount $bootImgMount
+umount tempMount
+syslinux $ksimg # install boot loader
+

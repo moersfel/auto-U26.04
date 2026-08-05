@@ -1,0 +1,43 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 371_firefox
+#  Created on: 10 Oct 2020
+#  Author: Jim Moersfelder
+#  Purpose: To install a non-snap verion os firefox
+#  Synopsis:
+#  Notes: 
+#  History: 
+#######################################
+
+echo "Remove snap firefox\n"
+snap remove firefox
+
+echo "Import the Mozilla APT repo signing key (if wget is missing, install it first):\n"
+wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
+
+echo "Add the Mozilla signing key to your sources.list\n"
+echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
+
+
+
+echo "Make non-snap repo the priority\n"
+echo '
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
+
+Package: firefox*
+Pin: release o=Ubuntu
+Pin-Priority: -1' | sudo tee /etc/apt/preferences.d/mozilla
+
+echo "use APT to remove Ubuntu’s pretend Firefox DEB (if still present) and installed the real-deal from Mozilla’s repository"
+apt update && sudo apt -y remove firefox
+
+echo "Install firefox\n"
+apt -y install firefox
+
+#echo "Make sure unattended upgrades doesn't install the snap firefox\n"
+#echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+
+echo "\n Done\n"

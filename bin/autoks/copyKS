@@ -1,0 +1,17 @@
+#! /bin/tcsh
+# script to take an already generated image file and modify it by overwriting
+# the ks.cfg file in the image with a new ks.cfg file (for a different machine).
+# Args: $1=ksimage, $2=ks.cfg
+if ($#argv != 2) then
+  echo "usage: copyKS ksimage ks.cfg"
+  exit 1
+endif
+set ksimg = $1
+set kscfg = $2
+
+unalias cp
+mkdir copyKStempMount
+mount -o loop $ksimg copyKStempMount
+cp -f $kscfg copyKStempMount # the ks.cfg file!
+umount copyKStempMount
+rmdir copyKStempMount

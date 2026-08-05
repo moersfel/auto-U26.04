@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 370_xrdp
+#  Created on: 6 Aug 2019
+#  Author: Samuel Tseng
+#  Purpose: To install and configure xrdp
+#  Synopsis:
+#  Notes: 
+#  History: 
+#######################################
+
+echo "Installing xrdp\n"
+apt install xrdp xorgxrdp xserver-xorg-input-all -y
+
+
+echo "Configuring xrdp\n"
+cp -f xrdp.ini /etc/xrdp/xrdp.ini
+cp -f startwm.sh /etc/xrdp/startwm.sh
+cp -f 02-allow-colord.conf /etc/polkit-1/localauthority.conf.d/02-allow-colord.conf
+mkdir /etc/systemd/system/xrdp.service.d
+cp -f override.conf /etc/systemd/system/xrdp.service.d
+
+
+echo "Restart xrdp\n"
+/etc/init.d/xrdp restart
+
+
+echo "\n Done\n"

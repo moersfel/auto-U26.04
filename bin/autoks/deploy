@@ -1,0 +1,36 @@
+#! /bin/tcsh
+# Script to deploy the ksimage file and execute a reboot
+# Assumes ksimage and ks_lilo.conf have been copied to the
+# ks machine's /tmp directory
+
+# ram disk file checked by lilo 
+# will make a link to this ramdisk in /boot so that lilo doesn't complain
+set vInitrd = "initrd-2.4.20-8.img" 
+
+unalias cp  # so that cp -f works
+unalias rm
+echo "making backup of /boot"
+# we have to save the boot partition since we are going to
+# overwrite it with our boot image.
+cp -rf /boot /boot2  
+umount /boot
+rm -rf /boot
+mv /boot2 /boot # need to do this to fool lilo
+ln --symbolic /boot/$vInitrd /boot/initrd  # for lilo.conf
+# save boot partition
+cat /dev/hda1 > /tmp/bootBackup
+# backup lilo.conf
+echo "Backing up lilo.conf in /tmp and replacing with ks version"
+cp -f /etc/lilo.conf /tmp
+cp -f /tmp/ks_lilo.conf /etc/lilo.conf
+# commit ksimage to boot partition
+echo "Committing ksimage to boot partition"
+cat /tmp/ksimage > /dev/hda1
+echo "Committing lilo to boot image and rebooting..."
+/sbin/lilo
+reboot
+
+
+
+
+

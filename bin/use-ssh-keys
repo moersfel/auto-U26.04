@@ -1,0 +1,2 @@
+ssh-agent $SHELL
+ssh-add ~/.ssh/github

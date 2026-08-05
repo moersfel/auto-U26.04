@@ -1,0 +1,36 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 750_crontab_random_apt_update_clean_csifonly  
+#  Created on: 2013  
+#  Author: Jim Moersfelder      
+#  Purpose: Adds random apt update to cron table      
+#  Synopsis:     
+#  Notes:        
+#  History: 07/06/15 - Unknown - Updated
+#			08/04/15 - Jarred Stein - Tested for F22      
+#	6/30/17 - Hugo Huang - Updated fro U16
+#######################################
+echo "Running script..."
+   
+RANDOM=`head -c 2 /dev/random | hexdump -d | awk '{print \$2}'`
+if [ `expr $RANDOM % 2` = '0' ]; then
+	RANDOM=`head -c 2 /dev/random | hexdump -d | awk '{print \$2}'`
+	MINUTE=`expr $RANDOM % 30 + 30`
+	HOUR=4
+else
+	RANDOM=`head -c 2 /dev/random | hexdump -d | awk '{print \$2}'`
+	MINUTE=`expr $RANDOM % 60`
+	HOUR=5
+fi
+
+echo "writing to /etc/cron.d/apt_reboot..."
+#$MINUTE $HOUR * * * root dnf -y update &>/var/log/dnf.last;dnf clean packages > /dev/null 2>&1;shutdown -r +10 > /dev/null 2>&1
+cat >> /etc/cron.d/apt_reboot << INPUT
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+$MINUTE $HOUR * * * root apt-get clean all > /dev/null 2>&1;apt-get update > /dev/null 2>&1; apt-get -y upgrade &>/var/log/apt.last;apt-get clean > /dev/null 2>&1;/sbin/shutdown -r +10 > /dev/null 2>&1
+INPUT
+printf "Done!\n"
+#$MINUTE $HOUR * * * root apt-get clean all;apt-get update; apt-get upgrade -y &>/var/log/apt-get.last;apt-get clean > /dev/null 2>&1;/sbin/shutdown -r +10 > /dev/null 2>&1

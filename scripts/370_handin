@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 370_handin 
+#  Created on:   
+#  Author: Jim Moersfelder      
+#  Purpose: Install handin     
+#  Synopsis: Creates man page and installs the handin program    
+#  Notes:        
+#  History:      
+#	6/28/2017 - Hugo Huang - Tested for U16.04
+#######################################
+
+echo Installing handin...
+cp handin-check /usr/local/bin
+chmod 755 /usr/local/bin/handin-check
+cp handin-check.1.gz /usr/share/man/man1
+chmod 755 /usr/share/man/man1/handin-check.1.gz
+
+tar xvf handin-2011.tar -C /tmp; cd /tmp/handin
+
+#As of F15/2011 man pages located in /usr/share/man
+#mkdir -p /usr/local/man/man8
+make install
+make install.man
+
+echo "Done with handin"
+
+printf "\nDone!"

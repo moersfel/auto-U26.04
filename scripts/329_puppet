@@ -1,0 +1,37 @@
+#!/bin/bash
+#######################################
+#  Script name: 329_puppet
+#  Created on: August 30, 2018
+#  Author: Ken Gribble
+#  Purpose: To install, configure, and enable puppet agent
+#  Synopsis:
+#  Notes: Might be good to move this closer to last, so puppet runs after everything else
+#         and a healthy reboot will help SSSD to bind.
+#        
+#  History: 
+#     20180830 14:12:30 - Ken Gribble re-wrote this script -- previous authors unknown.
+# 			- found script used "wget -O" see manpage as to why this wasn't a good idea
+#			- used "cd /tmp" instead.
+#     20180830 14:19:04 - Added puppet resource service to control puppet ensuring it's enabled and running
+#     20180830 16:16:29 - Finished testing, looks good now
+#######################################
+
+# Not sure why this is here 20180830 14:34:18 Ken Gribble 
+#apt-get -y update
+
+# Installs Puppet
+cd /tmp
+#wget https://apt.puppetlabs.com/puppet-release-xenial.deb
+#dpkg -i /tmp/puppet-release-xenial.deb
+apt-get -y update
+apt-get -y install puppet
+
+# Configures Puppet
+echo "#" >>  /etc/puppet/puppet.conf
+echo "# Point this node (agent) to the correct puppet server" >>  /etc/puppet/puppet.conf
+echo "[agent]" >>  /etc/puppet/puppet.conf
+echo "   server = puppet.cs.ucdavis.edu" >>  /etc/puppet/puppet.conf
+echo "   preferred_serialization_format = pson" >>  /etc/puppet/puppet.conf
+
+# Uses Puppet to ensure Puppet server runs
+/usr/bin/puppet resource service puppet ensure=running enable=true

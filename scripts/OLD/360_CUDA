@@ -1,0 +1,147 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 360_CUDA
+#  Created on: September 19, 2022
+#  Author: Jim Moersfelder
+#  Purpose: To install CUDA 11, tensorflow and NVIDIA drivers
+#  Synopsis:
+#  Notes:  Student wanted it for ecs171-Machine learning class INC1306659
+#         Here is the page I followed:
+#          https://www.tensorflow.org/install/gpu#ubuntu_1804_cuda_110
+#         I documented it here:
+#            https://docs.google.com/document/d/1kLgGHhtXyUYEm46H2t4iOJHF8t_SzLQCDnEofMBEXgU/edit?usp=sharing
+#         In support_files/CUDA11 I ran these wgets
+
+#          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin
+#          wget http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/nvidia-machine-learning-repo-ubuntu1804_1.0.0-1_amd64.deb
+#         wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/libnvinfer7_7.1.3-1+cuda11.0_amd64.deb
+#######################################
+
+echo "Doing graphics..."
+
+if [ ! "`/usr/bin/lspci | /bin/grep NVIDIA`" ]; then
+  echo "No NVIDIA cards found. Exiting without install."
+  exit
+fi
+
+# Remove all instances of nouveau or cuda/nvidia existing already
+apt-get -y purge xserver-xorg-video-nouveau
+apt-get -y purge libdrm-nouveau
+apt-get autoremove -y
+
+cp blacklist-nouveau.conf /etc/modprobe.d/
+#echo " blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
+echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
+
+apt-get -y install build-essential
+apt-get -y install linux-headers-$(uname -r)
+
+#rm /etc/apt/sources.list.d/cuda*
+#apt remove -y nvidia-*
+#apt remove -y cuda-*
+
+apt -y update
+apt -y upgrade
+
+cd /tmp
+
+#wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+
+#cp cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
+#apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
+#add-apt-repository -y "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /"
+dpkg -i cuda-repo-<distro>-X-Y-local_<version>*_<arch>.deb
+cp /var/cuda-repo-<distro>-X-Y-local/cuda-*-keyring.gpg /usr/share/keyrings/
+wget https://developer.download.nvidia.com/compute/cuda/repos/<distro>/<arch>/cuda-<distro>.pin
+mv cuda-<distro>.pin /etc/apt/preferences.d/cuda-repository-pin-600
+#wget https://developer.download.nvidia.com/compute/cuda/repos/<distro>/<arch>/cuda-keyring_1.1-1_all.deb
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+dpkg -i ./cuda-keyring_1.1-1_all.deb
+
+apt update
+#apt-get -y install cuda cuda-drivers
+#apt-get -y install nvidia-cuda-toolkit
+apt -y install cuda-toolkit
+apt -y install nvidia-gds
+apt -y install cuda-compat
+
+
+# As of 9/19/22 the ubuntu 22.04 repo doesn't exist and libnvinfer7_7.1.3-1+cuda11.0_amd64.deb doesn't exist in the 20.04 repo
+#wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64/nvidia-machine-learning-repo-ubuntu2004_1.0.0-1_amd64.deb
+#apt install -y nvidia-machine-learning-repo-ubuntu2004_1.0.0-1_amd64.deb
+#apt-get update
+#wget 
+
+
+# Note from below, in the Ubuntu repo libnvinfer is missing
+# Might need to install the nvidia developers repo
+# https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
+####### Below is from Ubuntu 18.04 #######################3
+
+
+#########################################
+## CUDA 11
+#########################################
+## Add NVIDIA package repositories
+## The wget was already done and put in support_files/360_CUDA11
+##wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin
+#cp cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
+#apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
+#add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/ /"
+#apt-get update
+##wget http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/nvidia-machine-learning-repo-ubuntu1804_1.0.0-1_amd64.deb
+#
+#apt install -y ./nvidia-machine-learning-repo-ubuntu1804_1.0.0-1_amd64.deb
+#apt-get update
+#
+##wget https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/libnvinfer7_7.1.3-1+cuda11.0_amd64.deb
+#apt install -y ./libnvinfer7_7.1.3-1+cuda11.0_amd64.deb
+#apt-get update
+#
+## Install development and runtime libraries (~4GB)
+#apt-get -y install --no-install-recommends --allow-downgrades \
+#    cuda-11-0 \
+#    libcudnn8=8.0.4.30-1+cuda11.0  \
+#    libcudnn8-dev=8.0.4.30-1+cuda11.0
+#
+## Reboot. Check that GPUs are visible using the command: nvidia-smi
+#
+## Install TensorRT. Requires that libcudnn8 is installed above.
+#
+##apt-get install -y --no-install-recommends libnvinfer7=7.1.3-1+cuda11.0 \
+##    libnvinfer-dev=7.1.3-1+cuda11.0 \
+##    libnvinfer-plugin7=7.1.3-1+cuda11.0
+#
+#
+#########################################
+## CUDA 9
+#########################################
+#
+##add-apt-repository ppa:graphics-drivers/ppa -y
+#
+##apt install -y nvidia-390
+##apt install -y nvidia-cuda-toolkit
+#
+#########################################
+## CUDA 10
+#########################################
+##apt-key adv --fetch-keys  http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
+##bash -c 'echo "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/cuda.list'
+##apt -y update
+#
+##apt install -y cuda cuda-drivers
+#
+## Update linux kernel
+##update-initramfs -u
+#
+## export does not work in kickstart so doing a different way (
+## export PATH=/usr/local/cuda-8.0/bin${PATH:+:${PATH}}
+##sed '$ s/.$//' /etc/environment > /tmp/env	# removes last character from /etc/environement and puts it into /tmp/env
+##echo :/usr/local/cuda-10.0/bin\" >> /tmp/env	# appends the required path to the file
+##tr -d '[:space:]' < /tmp/env > /etc/environment	# removes all new lines and white spaces and puts it back into /etc/environemnt		
+#
+## same as above
+## export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64 ${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+##echo "" >> /etc/environment
+##echo "LD_LIBRARY_PATH=\"/usr/local/cuda-10.0/lib64\"" >> /etc/environment

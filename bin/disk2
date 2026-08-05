@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# Get environment variables
+. ./ks_environment.sh
+
+if [ $# -lt 1 ]; then
+    echo "Usage: ./disk machine_name (without cs.ucdavis.edu)"
+    exit 1
+fi
+
+#IP_ADDRESS=`dig $1.cs.ucdavis.edu +sh`
+
+# Get the IP address of the target machine for the kickstart installation.
+IP_ADDRESS=`nslookup -sil $1.cs.ucdavis.edu 2> /dev/null | head -5 | tail -1 | awk '{ print $2 }'`
+
+x=`echo $IP_ADDlESS | sed 's/^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+$//'`
+if [ ! -z "$x" ]; then
+    echo IP address lookup for host $1 failed. 2>&1
+    exit 1
+fi
+
+#echo "Creating configuration file..."
+# Delete /tmp/ks.cfg just in case
+if [ -f /tmp/ks.cfg ]; then
+    rm -f /tmp/ks.cfg
+fi
+
+# Do search and replaces
+cat kickstart |\
+sed 's,<IP_ADDRESS>,'$IP_ADDRESS',' |\
+sed 's,<ISO_SERVER>,'$ISO_SERVER',' |\
+sed 's,<ISO_PATH>,'$ISO_PATH',' |\
+sed 's,<SUBNET_MASK>,'$SUBNET_MASK',' |\
+sed 's,<GATEWAY>,'$GATEWAY',' |\
+sed 's,<NAME_SERVER>,'$NAME_SERVER',' |\
+sed 's,<NIS_SERVER>,'$NIS_SERVER',' |\
+sed 's,<NIS_DOMAIN>,'$NIS_DOMAIN',' > /tmp/ks.cfg
+
+# Append rest of info
+cat ks_environment.sh >> /tmp/ks.cfg
+cat post_install >> /tmp/ks.cfg
+
+echo "Creating boot disk for $1, IP: $IP_ADDRESS"
+read -p "Insert disk and hit ENTER (Warning: Disk contents will be deleted):"
+
+###if [ `basename $0` != "disk_update" ]; then
+#    echo "Copying image..."
+###    dd if=f4boot.img of=/dev/fd0 bs=1440k
+###fi
+
+#echo "Copying kickstart file..."
+###mcopy -o /KS-F4/bin/ks.cfg a:
+###mcopy -o /KS-E3/bin/syslinux.cfg a:
+
+###if [ -f /tmp/ks.cfg ]; then
+###    rm -f /tmp/ks.cfg
+###fi
+echo "Finish making kickstart disk for $1."

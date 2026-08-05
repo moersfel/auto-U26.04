@@ -1,0 +1,89 @@
+#!/bin/bash
+
+#####################################
+#  Script name: 751_printer_csif
+#  Created on: 2013
+#  Author: Jim M.
+#  Purpose: Setup
+#  Synopsis: Setup for csif printer.
+#  Notes: Works in VMs and Machines.
+#  History: Made some changes to lpadmin and client.conf to allow lpr/libreoffice to print
+#           07/05/2016 Reuben Castelino
+#           09/14/2016 Jim Moersfelder, I commented out the line
+#                      lpadmin -p csif -o auth-info-required="none"
+#                      Because wasn't allowing Firefox to print.
+#######################################
+
+# Add some SAMBA
+apt install smbclient
+
+# Start the cups daemon so that lpadmin can communicate with it
+#service cups restart
+systemctl restart cups
+
+#disables avahi-daemon from running - this was allowing regular users to bypass our print server
+systemctl disable avahi-daemon.service
+apt-get -y remove avahi-daemon
+
+#copies the cups directory into etc (not sure this is still needed .......)
+#cp -r cups /etc/
+useradd -m -d /usr/local/papercut papercut
+
+
+#sets up the papercut client, and aliases it to pquota
+#cp papercut.zip /tmp
+#unzip /tmp/papercut.zip -d /tmp
+#mv /tmp/linux /usr/share/papercut
+unzip linux.zip -d /tmp
+mv /tmp/linux /usr/share/papercut
+
+#mv /usr/share/linux /usr/share/papercut
+echo "alias pquota '/usr/share/papercut/pc-client-linux.sh'" >> /etc/profile.d/aliases.csh
+echo "alias pquota='/usr/share/papercut/pc-client-linux.sh'" >> /etc/profile.d/aliases.sh
+
+#
+# IF THE PRINTER IS NOT WORKING AFTER A KICKSTART THE LINES BELOW ARE THE CULPRIT
+# The problem is that sometimes the drivers are not being pointed to properly yet
+# Just re-run the lpadmin command after it boots up for the first time
+# You can also add the lpadmin command to rc.local - but beware, you will have to
+# change the rc.local file everytime you make a change to the printers, or else they
+# will just revert back to their previous state
+#
+# If you want to get really fancy you can add it to the rc.local along with a line
+# to remove itself after running the first time - I am too lazy for this.
+#
+
+cp HP-LaserJet-M605.ppd /usr/share/cups/model
+
+#Sets up the CSIF printer and makes it default
+#lpadmin -p csif -E -v smb://AD3/coe-it-pcprint.engr.ucdavis.edu/CS-Balance -m drv:///hp/hpijs.drv/hp-laserjet_9050-hpijs-pcl3.ppd -L "Room 86"
+
+# Before 20230410
+#lpadmin -p csif -E -v smb://AD3/coe-it-pcprint.engr.ucdavis.edu/CS-Balance -P /usr/share/cups/model/HP-LaserJet-M605.ppd -L "Room 71"
+##lpadmin -p csif -o auth-info-required="none"
+#lpadmin -p csif -o printer-op-policy=authenticated
+#lpadmin -d csif
+
+# After 20230410
+lpadmin -p csif -E -v smb://AD3/coe-it-pcp-22.engr.ucdavis.edu/CS-Balance -P /usr/share/cups/model/HP-LaserJet-M605.ppd -L "Room 71"
+#lpadmin -p csif -o auth-info-required="none"
+lpadmin -p csif -o printer-op-policy=authenticated
+lpadmin -d csif
+
+echo "ServerName localhost:631/version=1.1" >> /etc/cups/client.conf
+
+
+#Sets up the old way of printing in case of emergencies
+#lpadmin -p csif_backup -E -v ipp://beast:631/printers/csif -m lsb/usr/HP/hp-laserjet_9050-ps.ppd.gz
+
+#Sets the cups daemon to run on startup
+###### Jim stopped this 170920
+#cp cups.service /etc/systemd/system
+
+#systemctl daemon-reload
+systemctl restart cups
+systemctl enable cups.service
+
+apt -y install apparmor-utils && aa-complain cupsd
+
+printf "\nDone!"

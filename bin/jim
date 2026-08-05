@@ -1,0 +1,139 @@
+=== pc1  ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              4134900   1965040   1959812  51% /
+/dev/hda1                46636     18902     25326  43% /boot
+none                    255960         0    255960   0% /dev/shm
+/dev/hda2              6127392   5245012    571124  91% /usr
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc10 ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              4134900   2072076   1852776  53% /
+/dev/hda1                46636     23749     20479  54% /boot
+none                    255960         0    255960   0% /dev/shm
+/dev/hda2              6127392   5445672    370464  94% /usr
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc11 ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hda2             37381228   7469064  28013284  22% /
+/dev/hda1                46636     23742     20486  54% /boot
+none                    255964         0    255964   0% /dev/shm
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc13 ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hda2             18951536  10076512   7912332  57% /
+/dev/hda1                46636     33419     10809  76% /boot
+none                    255960         0    255960   0% /dev/shm
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc14 ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              4134900   2035700   1889152  52% /
+/dev/hda1                46636     23747     20481  54% /boot
+none                    255960         0    255960   0% /dev/shm
+/dev/hda2              6127392   5461168    354968  94% /usr
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc15 ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hda2             18951536   7443252  10545592  42% /
+/dev/hda1                46636     23742     20486  54% /boot
+none                    255960         0    255960   0% /dev/shm
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc17 ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              4136316   2029924   1896276  52% /
+/dev/hda1                46636     23748     20480  54% /boot
+none                    255960         0    255960   0% /dev/shm
+/dev/hda2              6127392   5461168    354968  94% /usr
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc19 ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              4134900   2029056   1895796  52% /
+/dev/hda1                46636     23746     20482  54% /boot
+none                    255960         0    255960   0% /dev/shm
+/dev/hda2              6127392   5461168    354968  94% /usr
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc2  ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hda2             18951536   7484584  10504260  42% /
+/dev/hda1                46636     23739     20489  54% /boot
+none                    255992         0    255992   0% /dev/shm
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc20 ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              4134900   2053856   1870996  53% /
+/dev/hda1                46636     23748     20480  54% /boot
+none                    255960         0    255960   0% /dev/shm
+/dev/hda2              6127392   5461168    354968  94% /usr
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc24 ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              4134900   2032892   1891960  52% /
+/dev/hda1                46636     23744     20484  54% /boot
+none                    255960         0    255960   0% /dev/shm
+/dev/hda2              6127392   5464300    351836  94% /usr
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc3  ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              4134900   1695972   2228880  44% /
+/dev/hda1                46636     18901     25327  43% /boot
+none                    255960         0    255960   0% /dev/shm
+/dev/hda2              6127392   5258528    557608  91% /usr
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc4  ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              7210624   2026724   4817620  30% /
+/dev/hda1                46636     18901     25327  43% /boot
+none                    255960         0    255960   0% /dev/shm
+/dev/hda2              6127392   5342052    474084  92% /usr
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc5  ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              7210624   2080608   4763736  31% /
+/dev/hda1                46636     23747     20481  54% /boot
+none                    255960         0    255960   0% /dev/shm
+/dev/hda2              6127392   5461168    354968  94% /usr
+csifhome:/vol/vol1/csifhome
+                     162529280 134865720  27663560  83% /home
+csif:/var/mail        10077128   3532656   6443704  36% /var/mail
+=== pc6  ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hda2             18951536   7490276  10498568  42% /
+/dev/hda1                46636     23746     20482  54% /boot
+none                    127076         0    127076   0% /dev/shm
+=== pc7  ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              4134900   2075012   1849840  53% /
+/dev/hda1                46636     23749     20479  54% /boot
+none                    255960         0    255960   0% /dev/shm
+=== pc9  ===>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/hdb1              4136316   2060732   1865468  53% /
+/dev/hda1                46636     23746     20482  54% /boot
+none                    255960         0    255960   0% /dev/shm
+/dev/hda2              6127392   5461168    354968  94% /usr
+csifhome:/vol/vol1/csifhome

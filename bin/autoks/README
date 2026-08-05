@@ -1,0 +1,91 @@
+Autodisk is finally done!  To use, simply cd to the directory containing the 
+autodisk script and type
+	autodisk pcXX 
+where XX is the number of the pc to kickstart.  If you are running this from 
+sp3, the machine you wish to kickstart should be in sp3's ssh known_hosts file 
+so you don't have to type in the root password several times.  Once the machine
+is kickstarted, it is wise to install sp3's host key on the kickstarted machine
+using Andrew's Update_SSH script in ~sprog/bin.  If you don't, you will get an
+hostkey change error, which you then will have to edit the known_hosts file anyway,
+so it's better off to just update the host key.
+
+When you run autodisk, there are 2 possibilities.  The first is that the custom 
+image file ksimage does not exist.  In this case, autodisk calls mkFinal to create
+the ksimage file.  This is a non-trivial process since there is tons of mounting,
+decompressing, manipulating, recompressing, unmounting,and even filesystem creation 
+going on.  Beware of any errors, for the mkFinal script continues execution on error,
+and you might miss it.  
+
+The other possibility is that the ksimage file already exists, and if so, then all that
+is needed is to copy the new kickstart config file (/tmp/ks.cfg) to the ksimage.  This is
+done by calling copyKS in autodisk.
+
+Now at this point, you will see a message like "ready to deploy payload."  This is the 
+point of no return.  If you press CTRL-C, you can abort the kickstart.  Otherwise, 
+pressing any other key will copy install files to the destination machine, modify
+lilo and /dev/hda1, and reboot which will start the kickstart process.  If for some reason
+the kickstart fails between the copying of the files and rebooting, you may have to just
+kickstart the old-fashioned way, or see me and I might be able to restore the machine and 
+maybe find out what went wrong.
+
+Note that autodisk does no checking to see if someone is logged in before kickstarting, so
+do this on your own.  It should also be easy for anyone to modify autodisk to be used in
+shell scripting (ie removing the keypress before kickstarting), or kickstart a select group
+of machines. One final note - I added the commands to install the NVIDIA graphics driver
+and reboot the machine in the %post section of the post_install file, so we should not have
+to type those things manually like we used to do after a kickstart.
+
+Enjoy!
+-Dustin
+
+Files:
+  autodisk - The main script.  Just like disk but better. Takes pc name as arg.
+             It is basically a modified version of the original disk script.
+	     
+  mkFinal - Script to hack the boot and driver images and compose
+            them together into one superimage.  Takes the boot image
+	    file, ie rh90_image, and the ks.cfg file as arguments. Produces
+	    the ksimage superimage as output.  Presumes the existence of the 
+	    rh90_image, drvnet.img, and the syslinux.cfg.template file in the 
+	    same directory.  There are several versioning dependencies that will have
+	    to be handled here when Redhat's version changes.
+	    
+  copyKS -  Modifies the given ksimage file by copying the given ks.cfg file to
+            the ksimage, replacing the old ks.cfg already inside the ksimage.
+	    
+  		    
+  deploy -  Script that actually installs the ksimage into the machine to be kickstarted.
+    	    Depends on ks_lilo.conf being in the machine's /tmp directory.
+  
+  clean  -  Script that cleans some of the mess left behind by mkFinal.  It is called by
+            mkFinal just before it makes the ksimage.
+
+  README - This file.	    
+  
+Config/Data Files:
+
+  ks_lilo.conf - Special version of lilo.conf that will boot the /dev/hda1 device, which is 
+  	         where deploy writes ksimage.
+
+  syslinux.cfg.template - The custom syslinux.cfg file that has the elusive parameter
+                          "append ks=hd:hda1:/ks.cfg initrd=initrd.img" that tells syslinux to
+			  tell the kernel that the ks.cfg file is on the hard disk.  I think this 
+			  may be undocumented, I had to find it in the anaconda source code.
+  
+  rh90_image - The standard kickstart boot image (the one we use to copy onto floppies with the 
+               old disk command). Used by mkFinal to create the custom boot/driver image.
+	       
+  drvnet.img - The network drivers image.  This is the image we used to copy onto floppies and label
+               "driver disk".  Used by mkFinal to create the custom boot/driver image.
+	       
+  kickstart - From the original disk package.  Used by autodisk.  I think it is a kickstart config file
+              used as a template.  It is appended to the ks.cfg file.  
+
+  ks_environment.sh - From the original disk package.  Used by autodisk.  Must be part of the kickstart 
+                       configuration, since it is appended to ks.cfg.
+  
+  post_install - From the original disk package.  Used by autodisk, and has something to do with the 
+                 kickstart configuration since it is appended to ks.cfg. PS - I modified the %post section
+	         so that the NVIDIA graphics driver would be installed, and the machine rebooted.		       
+                  
+				  

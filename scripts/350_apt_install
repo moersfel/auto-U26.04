@@ -1,0 +1,48 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 750_apt_install 
+#  Created on: 2013  
+#  Author: Jim Moersfelder      
+#  Purpose: Downloads and installs apt repositories and packages     
+#  Synopsis:     
+#  Notes: When repository servers are down, this script will hang indefinitely       
+#  History: 10-17-13 - Unknown - Initial script for F20
+#			07-22-15 - Jarred S - Prevent run from cable2 and updated syntax
+#								  for F22     
+#	    07-05-17 - Samuel Tseng - Moved to U16.04 removed list.env and list.group. Merged into list.pkg
+#######################################
+
+# Don't allow running on cable2
+if [[ "`hostname`" = "cable2" ]]; then
+    echo "This script must be run through the maintenance command on the floor machines. Do not run it on cable2 directly."
+    exit 1
+fi
+
+echo "Starting apt update\n"
+apt-get -y update
+echo "Starting package installation\n"
+
+echo "Generating list\n"
+#sed -e '/^$/d' -e '/^#/d' list.env > /tmp/dnf_install.env.$$
+#sed -e '/^$/d' -e '/^#/d' list.group > /tmp/dnf_install.group.$$
+#sed -e '/^$/d' -e '/^#/d' list.pkg > /tmp/dnf_install.pkg.$$
+#sed -e '/^$/d' -e '/^#/d' group.pkg >> /tmp/dnf_install.pkg.$$
+sed -e '/^$/d;/^#/d' list.pkg > /tmp/apt_install.pkg.$$
+sed -e '/^$/d;/^#/d' group.pkg >> /tmp/apt_install.pkg.$$
+
+# Installs packages from generated list
+echo "Installing list\n"
+#yum group --setopt=group_command=objects unmark packages NetworkManager-l2tp
+#yum groupinstall -y --setopt=group_command=objects gnome-desktop-environment
+#xargs -a /tmp/dnf_install.env.$$ -n 1 apt-get install -y --setopt=group_command=objects
+#xargs -a /tmp/dnf_install.group.$$ -n 1 apt-get install -y
+xargs -a /tmp/apt_install.pkg.$$ -n 1 apt-get install -y
+
+# upgrading pip
+pip install --upgrade pip
+
+echo "Cleaning up list\n"
+rm -f /tmp/apt_install.$$
+
+echo "Done!\n"

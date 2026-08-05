@@ -1,0 +1,26 @@
+#!/bin/bash
+export SCRIPTS_PATH_EXTRAS=/scripts_extras
+export SCRIPTS_SUPPORT_PATH_EXTRAS=/support_files_extras
+###############################################################################
+#  Purpose: This script will change into the support directory for the 
+#           script and execute the given script.
+###############################################################################
+
+
+###############################################################################
+# Setup
+# Determines if a support directory for the script exists
+###############################################################################
+
+script_base=`basename $1`
+script_name=`echo $script_base | sed 's/^[0-9]\+_\(.\+\)$/\1/'`	# strip ???_
+
+if [ -e $KICKSTART_MNT/$SCRIPTS_SUPPORT_PATH_EXTRAS/$script_name ]; then
+	cd $KICKSTART_MNT/$SCRIPTS_SUPPORT_PATH_EXTRAS/$script_name
+fi
+
+###############################################################################
+# Execute the given script
+###############################################################################
+
+$KICKSTART_MNT/$SCRIPTS_PATH_EXTRAS/$1

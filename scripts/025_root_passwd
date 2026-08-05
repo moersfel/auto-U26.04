@@ -1,0 +1,25 @@
+#!/bin/bash
+#  Script name:    025_root_password
+#  Created on:    
+#  Author:        
+#  Purpose: 	   Changes root password       
+#  Synopsis:    
+#  Notes:        
+#  History:        07/07/2016 Tested for F24
+
+
+############################
+# Last updated: 20220913
+############################
+
+#################################################
+# Replaces default root password with saved one #
+#################################################
+printf "Starting\n"
+
+FILE=/etc/shadow
+PASS=`cat ./password`
+
+sed -i -e "1a root:$PASS:13993:0:99999:7:::" -e "1d" $FILE
+
+printf "\nDone!"

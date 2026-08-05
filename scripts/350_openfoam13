@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 350_openfoam13 
+#  Created on: 11/06/25
+#  Author: Jim Moersfelder      
+#  Purpose: Install the openfoam repo for version 13     
+#  Synopsis:     
+#  Notes:                                                                        
+#       # Steps to setup environment using alias
+#           nano ~/.bashrc
+#       # add the following in the ~/.bashrc at the bottom
+#         alias of13="source /opt/openfoam13/etc/bashrc"
+##      For more information
+##      https://openfoam.org/download/13-ubuntu/
+#  History:
+#######################################
+
+
+echo "Adding Openfoam 13\n"
+echo "Done with Openfoam 13\n"
+sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
+add-apt-repository http://dl.openfoam.org/ubuntu
+apt update
+apt -y install openfoam13

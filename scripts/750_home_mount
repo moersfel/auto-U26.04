@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 750_home_mount  
+#  Created on: 9/7/2018
+#  Author: Jim Moersfelder      
+#  Purpose: Mount the home file system to the CSIF Systems
+#  Synopsis:
+#  Notes:        
+#  History:                                                                                                          
+#######################################
+
+
+echo "enabling /home mount...\n"
+
+mkdir /home
+
+#### add user home directory FS to fstab
+echo "Yonder.ucdavis.edu:/GFS_ST_NR_4D_CS /home nfs rw,bg,soft,rsize=65536,wsize=65536,vers=3,nointr,timeo=600,tcp,noatime 0 0" >> /etc/fstab
+
+echo "Done!"

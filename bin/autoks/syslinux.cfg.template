@@ -1,0 +1,5 @@
+default ks
+prompt 0
+label ks
+  kernel vmlinuz
+  append ks=hd:hda1:/ks.cfg initrd=initrd.img

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+############################
+# Last updated: 05-17-2013 #
+############################
+
+#################
+# Adds SSH keys #
+#################
+
+echo adding ssh keys to /root/.ssh/authorized keys...
+
+mkdir -p /root/.ssh/ && \
+cat *.pub > /root/.ssh/authorized_keys && \
+chmod 600 /root/.ssh/authorized_keys
+
+printf "Done!\n"

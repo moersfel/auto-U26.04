@@ -1,0 +1,22 @@
+#!/bin/bash
+#  Script name:    320_needrestart_auto
+#  Created on:    
+#  Author:        
+#  Purpose: 	   Changes needrestart configuration
+#                   to prevent popup during auto apt-get installs
+#  Synopsis:    
+#  Notes:        
+#  History:        09/16/2022 Ken Gribble — creation and test with Ubuntu 22.04
+
+
+############################
+# Last updated: 20220916
+############################
+
+#################################################
+#################################################
+printf "Starting\n"
+
+echo "\$nrconf{restart} = 'a';" >> /etc/needrestart/needrestart.conf
+
+printf "\nDone!"

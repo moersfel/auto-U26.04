@@ -1,0 +1,65 @@
+#!/bin/bash
+###############################################################################
+#  Purpose: This script will extract the package into a temporary directory,
+#           execute the install script, then remove the temporary directory.
+#
+###############################################################################
+
+###############################################################################
+# Setup
+# Determines if a package.tar, package.tar.gz, or package.tgz exists
+###############################################################################
+
+pkg_base=`basename $1`
+pkg_name=`echo $pkg_base | sed 's/^[0-9]\+_\(.\+\)$/\1/'`	# strip ???_
+umask 022
+echo "kickstart_mnt=$KICKSTART_MNT"
+echo "TMP_PATH=$TMP_PATH"
+echo "PKG_BIN_PATH=$PKG_BIN_PATH"
+echo "SCRIPTS_SUPPORT_PATH=$SCRIPTS_SUPPORT_PATH"
+echo "pkg_name=$pkg_name"
+
+
+if [ -e $KICKSTART_MNT/$SCRIPTS_SUPPORT_PATH/$PKG_BIN_PATH/$pkg_name.tar ]; then
+    mkdir -p $TMP_PATH/$pkg_name
+    cd $TMP_PATH/$pkg_name
+    echo "tar"
+    tar xf $KICKSTART_MNT/$SCRIPTS_SUPPORT_PATH/$PKG_BIN_PATH/$pkg_name.tar
+
+elif [ -e $KICKSTART_MNT/$SCRIPTS_SUPPORT_PATH/$PKG_BIN_PATH/$pkg_name.tar.gz ]; then
+    mkdir -p $TMP_PATH/$pkg_name
+    cd $TMP_PATH/$pkg_name
+    echo "tar.gz"
+    tar zxf $KICKSTART_MNT/$SCRIPTS_SUPPORT_PATH/$PKG_BIN_PATH/$pkg_name.tar.gz
+
+elif [ -e $KICKSTART_MNT/$SCRIPTS_SUPPORT_PATH/$PKG_BIN_PATH/$pkg_name.tgz ]; then
+    mkdir -p $TMP_PATH/$pkg_name
+    cd $TMP_PATH/$pkg_name
+    echo "tgz"
+    tar zxf $KICKSTART_MNT/$SCRIPTS_SUPPORT_PATH/$PKG_BIN_PATH/$pkg_name.tgz
+
+elif [ -e $KICKSTART_MNT/$SCRIPTS_SUPPORT_PATH/$PKG_BIN_PATH/$pkg_name.bz2 ]; then
+    mkdir -p $TMP_PATH/$pkg_name
+    cd $TMP_PATH/$pkg_name
+    echo "bz2"
+    tar jxf $KICKSTART_MNT/$SCRIPTS_SUPPORT_PATH/$PKG_BIN_PATH/$pkg_name.bz2
+
+else
+    echo "Error, the binaries are missing for $pkg_name"
+    exit
+fi
+
+###############################################################################
+# Actual install
+###############################################################################
+
+cd $pkg_name
+$KICKSTART_MNT/$SCRIPTS_SUPPORT_PATH/$PKG_SCRIPT_PATH/$1
+
+
+###############################################################################
+# Cleanup
+###############################################################################
+
+rm -rf $TMP_PATH
+

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#######################################
+#  Script name:  360_visual_studio
+#  Created on:  01/22/19
+#  Author:      Jim Moersfelder 
+#  Purpose: Visual Studio install from their repo                
+#  Synopsis:     
+#  Notes: INC0720920
+#        Install instructions:
+#            https://linuxize.com/post/how-to-install-visual-studio-code-on-ubuntu-18-04/
+#  History:      
+#           - 9/29/22  Ken Gribble modified (added -y to add-apt-repostitory)
+#
+#############################################
+
+echo "Installing visual Studio..."
+
+apt-get -y update
+apt-get -y upgrade
+apt -y install software-properties-common apt-transport-https wget
+
+# apt-key is depreciated
+#wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+wget -q https://packages.microsoft.com/keys/microsoft.asc -O /etc/apt/trusted.gpg.d/microsoft.asc
+
+add-apt-repository -y "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+apt-get -y update
+apt -y install code
+
+printf "Done!\n"
+

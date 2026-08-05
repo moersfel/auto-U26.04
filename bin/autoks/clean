@@ -1,0 +1,5 @@
+#! /bin/tcsh
+umount *
+rm -rf bigMount bootimg 2.4.20-8BOOT drvnetImg initrd Modules RDModules tempMount \
+  initrd.ext2 initrd.img module-info modules.dep pcitable modules.cgz modules.cpio \
+  big_initrd copyKStempMount

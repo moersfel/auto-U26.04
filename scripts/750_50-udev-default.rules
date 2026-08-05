@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+
+#######################################
+#  Script name: 750_50-udev-default.rules
+#  Created on: May 24, 2024
+#  Author: Jim Moersfelder
+#  Purpose: Joel Porquet-Lupine wanted it installed for his class
+#  Synopsis:
+#  Notes:  INC1943108
+#######################################
+#
+#
+
+
+echo "Doing 750_50-udev-default.rules..."
+
+open (IN,"/lib/udev/rules.d/50-udev-default.rules");
+open (OUT,">/tmp/50-udev-default.rules");
+
+while (<IN>) {
+     if (/ KERNEL=="renderD\*", GROUP="render", MODE="0660"/) {
+          print OUT "SUBSYSTEM==\"drm\", KERNEL==\"renderD*\", GROUP=\"render\", MODE=\"0666\"\n";
+     } else {
+          print OUT "$_";
+     }
+}
+close (IN);
+close (OUT);
+
+system ("cp /tmp/50-udev-default.rules /lib/udev/rules.d/50-udev-default.rules");

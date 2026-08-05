@@ -1,0 +1,133 @@
+#!/bin/sh
+. ./ks_environment.sh
+
+error=0
+
+echo Checking configuration for...
+echo --------------------------------------------------------
+echo ISOs		:   $ISO_SERVER:$ISO_PATH
+echo Kickstart server	:   $KICKSTART_SERVER:$KICKSTART_PATH
+echo Install scripts	:   $SCRIPTS_PATH
+echo Install support	:   $SCRIPTS_SUPPORT_PATH
+echo Package scripts	:   $PKG_SCRIPT_PATH
+echo Package binaries	:   $PKG_BIN_PATH
+echo --------------------------------------------------------
+
+# Check ISO directory exists on ISO server
+if [ `hostname` = $ISO_SERVER -a ! -d $ISO_PATH  ]; then
+    echo Error $ISO_SERVER is missing $ISO_PATH for ISO images
+    error=`expr $error + 1`
+fi
+
+# Check permissions on ISO directory and ISOs
+if [ -d $ISO_PATH ]; then
+    if [ ! "`ls -ld $ISO_PATH | grep -G ^drwxr.xr.x`" ]; then
+	echo Error with permissions on $ISO_PATH, should be 755
+	error=`expr $error + 1`
+    fi
+    
+    for i in $ISO_PATH/*
+    do
+	if [ ! "`ls -l $i | grep -G ^-rw.r..r..`" ]; then
+	    echo Error with permissions on $i, should be 644
+	    error=`expr $error + 1`
+	fi
+    done
+    
+fi
+
+
+# Check kickstart directories exists on kickstart server
+if [ `hostname` = $KICKSTART_SERVER ]; then
+    if [ ! -d $KICKSTART_PATH$SCRIPTS_PATH ]; then
+	echo Error $KICKSTART_PATH$KICKSTART_SERVER is missing $KICKSTART_PATH$SCRIPTS_PATH
+	error=`expr $error + 1`
+    fi
+    if [ ! -d $KICKSTART_PATH$SCRIPTS_SUPPORT_PATH ]; then
+	echo Error $KICKSTART_PATH$KICKSTART_SERVER is missing $KICKSTART_PATH$SCRIPTS_SUPPORT_PATH
+	error=`expr $error + 1`
+    fi
+    if [ ! -d $KICKSTART_PATH$PKG_BIN_PATH ]; then
+	echo Error $KICKSTART_PATH$KICKSTART_SERVER is missing $KICKSTART_PATH$PKG_BIN_PATH
+	error=`expr $error + 1`
+    fi
+    if [ ! -d $KICKSTART_PATH$PKG_SCRIPT_PATH ]; then
+	echo Error $KICKSTART_PATH$KICKSTART_SERVER is missing $KICKSTART_PATH$PKG_SCRIPT_PATH
+	error=`expr $error + 1`
+    fi
+fi
+
+# Check permission on scripts directory and scripts
+if [ -d $KICKSTART_PATH$SCRIPTS_PATH ]; then
+    if [ ! "`ls -ld $KICKSTART_PATH$SCRIPTS_PATH | grep -G ^drwxr.xr.x`" ]; then
+	echo Error with permissions on $KICKSTART_PATH$SCRIPTS_PATH, should be 755
+	error=`expr $error + 1`
+    fi
+
+    # Make sure can read/execute script
+    for i in $KICKSTART_PATH$SCRIPTS_PATH/*
+    do
+	if [ ! "`ls -l $i | grep -G ^-rwxr.xr.x`" ]; then
+	    echo Error with permissions on $i, should be 755
+	    error=`expr $error + 1`
+	fi
+	# check permissions on support directory or symbolic link and make sure it exists
+	dir=`echo $i | sed -e 's-.*/--' -e 's/^[0-9]\+_\(.\+\)$/\1/'`
+	if [ -d $KICKSTART_PATH$SCRIPTS_SUPPORT_PATH/$dir -o \
+	     -h $KICKSTART_PATH$SCRIPTS_SUPPORT_PATH/$dir ]; then
+	    if [ ! "`ls -ld $KICKSTART_PATH$PKG_SCRIPT_PATH | grep -G ^.rwxr-xr-x`" ]; then
+		echo Error with permissions on $KICKSTART_PATH$SCRIPTS_PATH, should be 755
+		error=`expr $error + 1`
+	    fi
+	    
+	    for j in `find $KICKSTART_PATH$SCRIPTS_SUPPORT_PATH/$dir/`
+	    do
+#		echo checking $j
+		if [ ! "`ls -ll $j | grep -G ^.r..r..r..`" ]; then
+		    echo Error with permissions on $j, should be at least 444
+		    error=`expr $error + 1`
+		fi
+	    done
+	    
+
+	fi
+    done
+fi
+
+
+# Check permission on package directory and package binaries
+if [ -d $KICKSTART_PATH$PKG_SCRIPT_PATH ]; then
+    if [ ! "`ls -ld $KICKSTART_PATH$PKG_SCRIPT_PATH | grep -G ^drwxr.xr.x`" ]; then
+	echo Error with permissions on $KICKSTART_PATH$PKG_SCRIPT_PATH, should be 755
+	error=`expr $error + 1`
+    fi
+
+    # Make sure can read/execute script
+    for i in $KICKSTART_PATH$PKG_SCRIPT_PATH/*
+    do
+	if [ ! "`ls -l $i | grep -G ^-rwxr.xr.x`" ]; then
+	    echo Error with permissions on $i, should be 755
+	    error=`expr $error + 1`
+	fi
+	# check permissions on support directory if exists
+	dir=`echo $i | sed -e 's-.*/--' -e 's/^[0-9]\+_\(.\+\)$/\1/'`
+	if [ -e $KICKSTART_PATH$PKG_BIN_PATH/$dir.tar.gz ]; then
+	    if [ ! "`ls -ld $KICKSTART_PATH$PKG_BIN_PATH | grep -G ^drwxr-xr-x`" ]; then
+		echo Error with permissions on $KICKSTART_PATH$PKG_BIN_PATH, should be 755
+		error=`expr $error + 1`
+	    fi
+	    
+
+	    if [ ! "`ls -l $KICKSTART_PATH$PKG_BIN_PATH/$dir.tar.gz | grep -G ^.r..r..r..`" ]; then
+		    echo Error with permissions on $j, should be at least 444
+		    error=`expr $error + 1`
+	    fi
+	else
+	    echo Missing binaries for package: $dir
+	    error=`expr $error + 1`
+	fi
+    done
+fi
+
+
+echo Found $error errors...

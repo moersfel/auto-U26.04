@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 360_apptainer
+#  Created on: December 20, 2022
+#  Author: Jim Moersfelder
+#  Purpose: To install apptainer on the computers in the CSIF
+#  Synopsis:
+#  Notes:  Hoa Nguyen wanted it. INC1532850
+#          COE-IT suggested https://apptainer.org/ because it is 
+#          used on HPC.  It has a rootless part.  
+#          
+#######################################
+
+echo "Doing apptainer..."
+
+cd /tmp
+ wget https://github.com/apptainer/apptainer/releases/download/v1.1.4/apptainer_1.1.4_amd64.deb
+apt-get install -y ./apptainer_1.1.4_amd64.deb
+
+echo "DONE with apptainer..."

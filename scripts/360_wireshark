@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 360_wireshark
+#  Created on: January 18, 2023
+#  Author: Jim Moersfelder
+#  Purpose: To install wireshark
+#  Synopsis:
+#  Notes:  course EEC173A/ECS152A is being taught this Winter 2023 quarter by an ECE professor, Dr. Cheung
+# Phil Young brought this to my attention
+#          
+#######################################
+
+echo "Doing wireshark..."
+
+apt-get update
+echo "wireshark-common wireshark-common/install-setuid boolean false" | debconf-set-selections
+DEBIAN_FRONTEND=noninteractive apt-get -q -y install wireshark
+
+echo "DONE with wireshark..."

@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#######################################
+#  Script name:  360_googletest
+#  Created on:  04/01/19
+#  Author:      Jim Moersfelder 
+#  Purpose: Install Googletest for ECS34 requested by Chris Nitta
+#  Synopsis:     
+#  Notes: INC0759331
+#  History:      
+#          - 9/29/22 Ken Gribble revamp for Chris Nitta on U22.04
+#############################################
+
+echo "Installing googletest..."
+
+cd /tmp
+git clone https://github.com/google/googletest.git -b release-1.12.0
+cd /tmp/googletest
+mkdir build
+cd build
+cmake ..
+make
+make install
+cd /tmp
+rm -rf /tmp/googletest
+printf "Done!\n"
+

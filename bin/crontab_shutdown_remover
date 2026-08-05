@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+use strict;
+use File::Copy;
+my $oldcrontab="/etc/crontab";
+my $newcrontab="/etc/crontab_new";
+
+open (OLDCRON, "$oldcrontab" ) or die "can't open $oldcrontab : $! \n";
+open (NEWCRON, ">$newcrontab" ) or die "can't open $newcrontab : $! \n";
+
+while (<OLDCRON>) {
+	next if /shutdown -r/;
+	print NEWCRON $_;
+}
+close (OLDCRON);
+close (NEWCRON);
+
+copy ($newcrontab, $oldcrontab) or die "File $newcrontab cannot be copied over $oldcrontab: $! \n";

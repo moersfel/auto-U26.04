@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 350_openfoam2406
+#  Created on: 11/07/25
+#  Author: Jim Moersfelder      
+#  Purpose: Install the openfoam repo for version 2406   
+#  Synopsis:     
+#  Notes:                                                                        
+#  History:
+#######################################
+
+
+echo "Adding Openfoam 2406\n"
+wget -q -O - https://dl.openfoam.com/add-debian-repo.sh | sudo bash
+
+# Update the repository information
+apt-get update
+
+# Install preferred package. Eg,
+apt-get -y install openfoam2406-default
+
+echo "Done with Openfoam 2406\n"

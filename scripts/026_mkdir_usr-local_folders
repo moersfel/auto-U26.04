@@ -1,0 +1,15 @@
+#!/bin/bash
+   
+############################
+# Last updated: 05-17-2013 #
+############################
+
+##################################
+# creates folders in /usr/local/ #
+##################################
+printf "Starting\n"
+
+mkdir -p /usr/local/bin
+mkdir -p /usr/local/man/man1
+
+printf "\nDone!"

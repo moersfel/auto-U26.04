@@ -1,0 +1,41 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 371_chromium
+#  Created on: 16 Oct 2025
+#  Author: Jim Moersfelder
+#  Purpose: To install a non-snap verion os chromium
+#  Synopsis:
+#  Notes: 
+#  History: 
+#######################################
+
+echo "Remove snap chromium\n"
+#apt -y remove chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg-extra
+apt -y remove chromium-browser
+
+echo "Import the google APT repo signing key (if wget is missing, install it first):\n"
+wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo tee /etc/apt/trusted.gpg.d/google.asc >/dev/null
+
+echo "Add the google signing key to your sources.list\n"
+    echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/google.asc] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+
+
+#echo "Make non-snap repo the priority\n"
+#echo '
+#Package: *
+#Pin: origin packages.mozilla.org  <------- CHANGE
+#Pin-Priority: 1000
+#
+#Package: firefox*  <------- CHANGE
+#Pin: release o=Ubuntu
+#Pin-Priority: -1' | sudo tee /etc/apt/preferences.d/google-chrome.list
+
+echo "Install google-chrome-stable\n"
+apt update
+apt -y install google-chrome-stable
+
+#echo "Make sure unattended upgrades doesn't install the snap firefox\n"
+#echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+
+echo "\n Done\n"

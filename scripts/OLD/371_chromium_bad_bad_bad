@@ -1,0 +1,70 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 371_chromium
+#  Created on: 10 Oct 2025
+#  Author: Jim Moersfelder
+#  Purpose: To install a non-snap verion os chromium
+#  Synopsis:
+#  Notes: 
+#  History: 
+#######################################
+
+echo "Remove snap chromium\n"
+apt -y remove chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg-extra
+
+echo "Import the chromium APT repo signing key (if wget is missing, install it first):\n"
+
+echo "deb [arch=amd64 trusted=yes] http://deb.debian.org/debian bookworm main non-free-firmware" > /etc/apt/sources.list.d/debian.list
+echo "deb [arch=amd64 trusted=yes] http://deb.debian.org/debian bookworm-updates main non-free-firmware" >> /etc/apt/sources.list.d/debian.list
+echo "deb [arch=amd64 trusted=yes] http://deb.debian.org/debian-security bookworm-security main non-free-firmware" >> /etc/apt/sources.list.d/debian.list
+
+
+#echo" deb [arch=amd64 signed-by=/usr/share/keyrings/debian-buster.gpg] http://deb.debian.org/debian buster main" > /etc/apt/sources.list.d/debian.list
+#echo "deb [arch=amd64 signed-by=/usr/share/keyrings/debian-buster-updates.gpg] http://deb.debian.org/debian buster-updates main" >> /etc/apt/sources.list.d/debian.list
+#echo "deb [arch=amd64 signed-by=/usr/share/keyrings/debian-security-buster.gpg] http://deb.debian.org/debian-security buster/updates main"  >> /etc/apt/sources.list.d/debian.list
+
+
+#echo "Add the Chromium signing keys\n"
+#apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DCC9EFBF77E11517
+#apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
+#apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 112695A0E562B32A
+
+
+#apt-key export 77E11517 | sudo gpg --dearmour -o /usr/share/keyrings/debian-buster.gpg
+#apt-key export 22F3D138 | sudo gpg --dearmour -o /usr/share/keyrings/debian-buster-updates.gpg
+#apt-key export E562B32A | sudo gpg --dearmour -o /usr/share/keyrings/debian-security-buster.gpg
+
+
+
+
+
+
+echo "Make non-snap repo the priority\n"
+echo 'Package: * \n Pin: origin deb.debian.org    \n Pin-Priority: -1 \n  \n Package: chromium* \n Pin: origin deb.debian.org \n Pin-Priority: 999 \n  \n Package: libjpeg62-turbo* \n Pin: origin deb.debian.org \n Pin-Priority: 999 \n  \n Package: libdav1d6* \n Pin: origin deb.debian.org \n Pin-Priority: 999 \n  \n Package: chromium* \n Pin: origin us.archive.ubuntu.com \n Pin-Priority: -1 \n  \n ' | sudo tee /etc/apt/preferences.d/chromium.pref
+
+
+#echo '
+# Note: 2 blank lines are required between entries
+#Package: *
+#Pin: release a=eoan
+#Pin-Priority: 500
+
+#Package: *
+#Pin: origin "deb.debian.org"
+#Pin-Priority: 300
+##
+# Pattern includes 'chromium', 'chromium-browser' and similarly
+# named dependencies:
+#Package: chromium*
+#Pin: origin "deb.debian.org"
+#Pin-Priority: 700 ' | sudo tee /etc/apt/preferences.d/chromium.pref
+
+echo "Install chromium\n"
+sudo apt update
+sudo apt -y install chromium
+
+#echo "Make sure unattended upgrades doesn't install the snap firefox\n"
+#echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+
+echo "\n Done\n"
