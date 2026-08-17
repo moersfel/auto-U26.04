@@ -1,0 +1,25 @@
+#!/bin/bash
+#######################################
+#  Script name: 330_add_ubuntu_pro
+#  Created on: 10-17-2026  
+#  Author: Jim Moersfelder      
+#  Purpose: Add the Ubuntu Pro repo     
+#  Synopsis: Adds the Ubuntu Pro repo to the computer.
+#
+#  Notes: The install instructions and license string
+#         are in 1password.  We use the workstation 
+#         version
+#  History: 
+#
+#######################################
+
+echo "Adding Ubuntu Pro"
+apt-get -y update
+apt-get -y upgrade
+apt-get install pro -y
+apt-get -y update
+
+
+pro attach C13LEBDUTvsLHgEr8yEuyCJrAxhCwt
+
+echo "\nDone!"

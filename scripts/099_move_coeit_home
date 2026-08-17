@@ -1,0 +1,17 @@
+#!/bin/bash
+#  Script name:    099_move_csssg_home
+#  Created on:
+#  Author:
+#  Purpose: 	   moves the home directory of csssg to /usr/home/csssg
+#  Synopsis:
+#  Notes:
+#  History:        09/15/2022 Created and Tested
+
+
+printf "Starting\n"
+
+mkdir /usr/home
+mv /home/coeit /usr/home
+usermod --home /usr/home/coeit coeit
+
+printf "\nDone!"

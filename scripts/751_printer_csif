@@ -15,7 +15,7 @@
 #######################################
 
 # Add some SAMBA
-apt install smbclient
+apt -y install smbclient
 
 # Start the cups daemon so that lpadmin can communicate with it
 #service cups restart

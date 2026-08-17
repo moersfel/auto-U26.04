@@ -43,6 +43,6 @@ xargs -a /tmp/apt_install.pkg.$$ -n 1 apt-get install -y
 pip install --upgrade pip
 
 echo "Cleaning up list\n"
-rm -f /tmp/apt_install.$$
+#rm -f /tmp/apt_install.$$
 
 echo "Done!\n"

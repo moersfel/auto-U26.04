@@ -9,6 +9,8 @@
 #  Notes:  course  ECS171 INC1613259, Requested by a student but he said
 #          prof Setareh Rafatirad. web: https://docs.anaconda.com/anaconda/install/linux/
 #                                            
+# 08/11/26 Jim Moersfelder downloaded to support_files/anaconda
+# wget https://repo.anaconda.com/archive/Anaconda3-2026.07-1-Linux-x86_64.sh
 #          
 #######################################
 
@@ -17,7 +19,7 @@ echo "Doing anaconda..."
 apt-get update
 apt-get -y install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6
 # -b mode is batch mode to install it silently
-bash Anaconda3-2023.03-Linux-x86_64.sh -b -p /usr/local/anaconda3
+bash Anaconda3-2026.07-1-Linux-x86_64.sh -b -p /usr/local/anaconda3
 
 
 echo "DONE with anaconda..."

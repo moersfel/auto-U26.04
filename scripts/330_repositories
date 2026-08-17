@@ -15,6 +15,7 @@
 #	    10/5/15  Jarred Stein - commented out dnf repolist because it would time out during ks
 #      	    02/16/17 Jarred Stein - added Fish shell repo per INC0391598
 # 	    06/28/17 Samuel Tseng - Updated for U16.04.
+#           08/10/26 Jim Moersfelder - I upgraded to version 4 for 26.04
 #######################################
 
 echo "updating apt and adding ubuntu-standard"
@@ -28,7 +29,7 @@ echo "Adding repositories for apt-get"
 
 
 #Fish shell repo
-apt-add-repository ppa:fish-shell/release-3 -y
+add-apt-repository ppa:fish-shell/release-4 -y
 
 
 #Codelite Repository

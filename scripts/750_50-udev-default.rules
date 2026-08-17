@@ -12,11 +12,11 @@
 #
 
 
-echo "Doing 750_50-udev-default.rules..."
+print "Doing 750_50-udev-default.rules...\n";
 
 open (IN,"/lib/udev/rules.d/50-udev-default.rules");
 open (OUT,">/tmp/50-udev-default.rules");
-
+# Changes mode from 0660 to 0666
 while (<IN>) {
      if (/ KERNEL=="renderD\*", GROUP="render", MODE="0660"/) {
           print OUT "SUBSYSTEM==\"drm\", KERNEL==\"renderD*\", GROUP=\"render\", MODE=\"0666\"\n";

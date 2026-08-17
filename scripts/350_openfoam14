@@ -14,12 +14,14 @@
 ##      For more information
 ##      https://openfoam.org/download/13-ubuntu/
 #  History:
+#       08/12/26 Jim moersfelder upgrade to openfoam14
 #######################################
 
 
-echo "Adding Openfoam 13\n"
-echo "Done with Openfoam 13\n"
+echo "Adding Openfoam 14\n"
+echo "Done with Openfoam 14\n"
 sh -c "wget -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
-add-apt-repository http://dl.openfoam.org/ubuntu
+add-apt-repository -y http://dl.openfoam.org/ubuntu
 apt update
-apt -y install openfoam13
+#apt -y install openfoam13
+apt -y install openfoam14
