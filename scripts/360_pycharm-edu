@@ -7,12 +7,14 @@
 #  Purpose: To install pycharm-educational
 #  Synopsis:
 #  Notes:  course  ECS171 INC1814960
+#  History: changed pycharm-educational to pycharm-community line 18
 #                                            
 #          
 #######################################
 
 echo "Doing pycharm-educational..."
 
-snap install pycharm-educational --classic
+#snap install pycharm-educational --classic
+snap install pycharm-community --classic
 
 echo "DONE with pycharm-educational..."

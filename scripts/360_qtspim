@@ -16,6 +16,9 @@
 
 echo "Doing qtspim..."
 
-dpkg --install qtspim_9.1.23_linux64.deb
+#dpkg --install qtspim_9.1.23_linux64.deb
+cd /tmp
+wget https://deac-riga.dl.sourceforge.net/project/spimsimulator/qtspim_9.1.24_linux64.deb
+dpkg --install ./qtspim_9.1.24_linux64.deb
 
 echo "DONE with qtspim..."

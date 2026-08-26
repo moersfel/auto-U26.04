@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 325_ubuntu_drivers
+#  Created on: Aug 20, 2026
+#  Author: Jim Moersfelder
+#  Purpose: To install nvidia drivers
+#  Synopsis:
+#  Notes:  I got it from instructions to install CUDA.
+#   https://ubuntu.com/server/docs/how-to/graphics/install-nvidia-drivers/
+#######################################
+
+echo "ubuntu-drivers install..."
+
+apt update
+apt -y upgrade
+
+# line below installed ubuntu-drivers-common which when run installs
+# NVIDIA closed source driver from ubuntu repos
+apt -y install ubuntu-drivers-common
+ubuntu-drivers install

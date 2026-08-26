@@ -12,7 +12,8 @@ printf "Starting\n"
 cd /tmp
 
 # Get go
-wget https://go.dev/dl/go1.17.4.linux-amd64.tar.gz
+#wget https://go.dev/dl/go1.17.4.linux-amd64.tar.gz
+wget https://go.dev/dl/go1.27.0.linux-amd64.tar.gz
 
 # Remove old go directory if it exists
 if test -d "/usr/local/go"; then
@@ -25,7 +26,7 @@ if test -f "/usr/bin/go"; then
 fi
 
 # Install new go
-tar -C /usr/local -xzf go1.17.4.linux-amd64.tar.gz
+tar -C /usr/local -xzf go1.27.0.linux-amd64.tar.gz
 
 # Link go to normal path
 ln -s /usr/local/go/bin/go /usr/bin/go
