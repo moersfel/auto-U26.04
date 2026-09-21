@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 750_timezone  
+#  Created on: Sep. 21, 2026
+#  Author: Jim Moersfelder      
+#  Purpose: Change the time zone to America/Los_Angeles
+#  Synopsis:     
+#  Notes:        
+#  History: 
+#######################################
+echo "Running Time change script..."
+timedatectl set-timezone America/Los_Angeles
+echo "Done"
+   
