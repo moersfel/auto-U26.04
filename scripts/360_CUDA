@@ -25,37 +25,11 @@ if [ ! "`/usr/bin/lspci | /bin/grep NVIDIA`" ]; then
   exit
 fi
 
+apt update
 apt install -y build-essential dkms linux-headers-$(uname -r)
 
-#rm /etc/apt/sources.list.d/cuda*
-#apt remove -y nvidia-*
-#apt remove -y cuda-*
-
-apt -y update
+apt update
 apt -y upgrade
 
 #apt install -y cuda
-apt install -y cuda-toolkit
-
-
-
-#cd /tmp
-# Doesn't do anything
-#wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
-#dpkg -i ./cuda-keyring_1.1-1_all.deb
-
-#wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-archive-keyring.gpg
-#mv cuda-archive-keyring.gpg /usr/share/keyrings/cuda-archive-keyring.gpg
-#echo "deb [signed-by=/usr/share/keyrings/cuda-archive-keyring.gpg] https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /" \
-#    | tee /etc/apt/sources.list.d/cuda-ubuntu2204-x86_64.list
-
-# apt update
-
-#apt update
-#apt-get -y install cuda cuda-drivers
-#apt-get -y install nvidia-cuda-toolkit
-#apt -y install linux-headers-$(uname -r)
-#apt -y install nvidia-open
-#apt -y install cuda-toolkit
-#apt -y install nvidia-gds
-#apt -y install cuda-compat
+apt install -y nvidia-cuda-toolkit

@@ -18,5 +18,7 @@
 printf "Starting\n"
 
 echo "\$nrconf{restart} = 'a';" >> /etc/needrestart/needrestart.conf
+mkdir /etc/needrestart/conf.d
+echo "\$nrconf{kernelhints} = 0 ;" >> /etc/needrestart/conf.d/silence_kernel.conf
 
 printf "\nDone!"

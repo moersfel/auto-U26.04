@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 351_apt_install_noninteractive 
+#  Created on: Aug 26, 2026
+#  Author: Jim Moersfelder      
+#  Purpose: These apt installs require interaction, we want to ignore that
+#  Synopsis:     
+#  Notes:                                                                            
+#  History: 
+#######################################
+
+
+echo "Starting non interaction apt install\n"
+apt-get -y update
+echo "Starting package installation\n"
+
+# checkrootkit installed postfix
+
+#DEBIAN_FRONTEND=noninteractive apt-get install -y postfix
+
+#apt-get -y install chkrootkit
+
+# xfce4 installed lightdm
+#DEBIAN_FRONTEND=noninteractive apt-get install -y lightdm
+#apt-get -y install xfce
+
+#DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-desktop
+echo "Done!\n"

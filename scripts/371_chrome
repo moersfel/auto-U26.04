@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#######################################
+#  Script name: 371_chrome
+#  Created on: 28 Aug 2026
+#  Author: Jim Moersfelder
+#  Purpose: To install chrome and the chrome repo
+#  Synopsis:
+#  Notes: 
+#  History: 
+#######################################
+
+#echo "Remove snap chromium\n"
+#apt -y remove chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg-extra
+#apt -y remove chromium-browser
+
+echo "Install google-chrome-stable\n"
+cd /tmp
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+apt update
+apt -y upgrade
+apt -y install ./google-chrome-stable_current_amd64.deb
+
+
+echo "\n Done\n"

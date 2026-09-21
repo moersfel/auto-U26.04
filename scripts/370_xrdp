@@ -25,5 +25,6 @@ cp -f override.conf /etc/systemd/system/xrdp.service.d
 echo "Restart xrdp\n"
 /etc/init.d/xrdp restart
 
+systemctl daemon-reload
 
 echo "\n Done\n"
