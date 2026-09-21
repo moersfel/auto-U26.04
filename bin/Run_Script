@@ -3,7 +3,8 @@
 #  Purpose: This script will change into the support directory for the 
 #           script and execute the given script.
 ###############################################################################
-
+export SCRIPTS_PATH=/scripts
+export SCRIPTS_SUPPORT_PATH=/support_files
 
 ###############################################################################
 # Setup

@@ -1,0 +1,20 @@
+#!/bin/bash
+#######################################
+#  Script name: 360_Fish 
+#  Created on: 08/28/2026  
+#  Author: Jim Moersfelder      
+#  Purpose: Install the Fish repo and the fish shell     
+#  Synopsis:                                                           
+#  Notes:        
+#  History: 
+#######################################
+
+echo "Adding Fish Shell"
+
+
+#Fish shell repo
+add-apt-repository ppa:fish-shell/release-4 -y
+apt-get -y update
+apt-get -y install fish
+
+echo "\nDone!"

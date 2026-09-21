@@ -1,0 +1,29 @@
+###############################################################################
+# Script that configures system and installs packages
+###############################################################################
+#
+
+export KICKSTART_SERVER=icefish.cs.ucdavis.edu
+export KICKSTART_PATH=/data/auto-U26.04
+# Paths relative to KICKSTART_SERVER:KICKSTART_PATH
+export KICKSTART_MNT=/mnt/ks
+export SCRIPTS_PATH=scripts
+export LOG_DIR=/root/ks_log
+
+
+
+
+mkdir -p $KICKSTART_MNT
+mount -t nfs $KICKSTART_SERVER:$KICKSTART_PATH $KICKSTART_MNT
+
+mkdir -p $LOG_DIR
+
+cd $KICKSTART_MNT/$SCRIPTS_PATH
+for f in `ls`; do
+	# Execute script and store the log
+	$KICKSTART_MNT/bin/Run_Script $f >> $LOG_DIR/$f 2>&1
+done
+
+cd /
+#umount $KICKSTART_MNT
+#rmdir $KICKSTART_MNT

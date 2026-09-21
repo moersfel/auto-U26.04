@@ -1,0 +1,16 @@
+#!/bin/bash
+#######################################
+#  Script name: 330_install_ubuntu_standard 
+#  Created on: 08/28/2026  
+#  Author: Jim Moersfelder      
+#  Purpose: Install unbuntu standard early     
+#  Synopsis: a virtual package in Ubuntu that installs a core set of standard command-line utilities and system tools
+#  Notes:        
+#  History: 
+#######################################
+
+echo "updating ubuntu-standard"
+apt-get -y update
+apt-get install ubuntu-standard -y
+
+echo "\nDone!"

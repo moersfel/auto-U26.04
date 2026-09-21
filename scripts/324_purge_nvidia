@@ -6,7 +6,7 @@
 #  Author: Jim Moersfelder
 #  Purpose: To uninstall any pre-installed nvidia driver
 #  Synopsis:
-#  Notes:  I got it from instructions to install CUDA.
+#  Notes:  I got it from old ways of removing NVIDIA scripts.
 #######################################
 
 echo "purge Nvidia drivers install..."
@@ -22,6 +22,6 @@ apt-get -y purge xserver-xorg-video-nouveau
 apt-get -y purge libdrm-nouveau
 apt-get autoremove -y
 
-cp blacklist-nouveau.conf /etc/modprobe.d/
+#cp blacklist-nouveau.conf /etc/modprobe.d/
 #echo " blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
 echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf

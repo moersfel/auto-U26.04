@@ -37,7 +37,8 @@ echo "Installing list\n"
 #yum groupinstall -y --setopt=group_command=objects gnome-desktop-environment
 #xargs -a /tmp/dnf_install.env.$$ -n 1 apt-get install -y --setopt=group_command=objects
 #xargs -a /tmp/dnf_install.group.$$ -n 1 apt-get install -y
-xargs -a /tmp/apt_install.pkg.$$ -n 1 apt-get install -y
+#xargs -a /tmp/apt_install.pkg.$$ -n 1 DEBIAN_FRONTEND=noninteractive apt-get install -y
+DEBIAN_FRONTEND=noninteractive xargs -a /tmp/apt_install.pkg.$$ -n 1 apt-get install -y
 
 # upgrading pip
 pip install --upgrade pip
